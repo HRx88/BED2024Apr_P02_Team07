@@ -18,10 +18,10 @@ Roles:
 (Sarrinah)
 
 Additional features
-- users can filter their search for courses based on categories, languages and skill level
-- On the My learning page, there is a Course Favourites section for users to see their favourite courses and Recommended Courses
+- Users can filter their search for courses based on categories, languages and skill level
+- On the My Learning page, there is a Course Favourites section for users to see their favourite courses and Recommended Courses
 - In the Blog page, users can communicate with other users by leaving a blog, or replying to a blog if they want to know more about a certain topic or get recommendations.
-- 
+- On the My Account page, recent courses that they have visited will be shown. They can aslo choose to edit or delete their profile on the same page.
   
 Technologies Used
 -
