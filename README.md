@@ -12,11 +12,10 @@ Github: https://github.com/HRx88/BED2024Apr_P02_Team07.git
 
 Roles: 
 (Hong Rong)
--
+
 (Aung)
--
+
 (Sarrinah)
-- 
 
 Additional features
 - users can filter their search for courses based on categories, languages and skill level
