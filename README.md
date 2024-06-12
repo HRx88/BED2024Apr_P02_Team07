@@ -31,5 +31,6 @@ Additional errors faced:
 - 
 Credits: 
 -
-Media: The photos the site was obtained from:
+Media: (The photos the site was obtained from)
 
+Reflection
