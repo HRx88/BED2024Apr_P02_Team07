@@ -1,0 +1,24 @@
+{
+  "name": "bed2024apr_p02_team07",
+  "version": "1.0.0",
+  "description": "BED Assignment\r Group members: Tan Hong Rong, Aung Phoom Myat, Nur Sarrinah",
+  "main": "app.js",
+  "scripts": {
+    "devStart": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "joi": "^17.13.3",
+    "mssql": "^11.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
