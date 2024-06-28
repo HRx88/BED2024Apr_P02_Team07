@@ -1,10 +1,19 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const Controller = require("./controllers/AccountController");
+const sql = require("mssql");
+const dbConfig = require("./dbConfig");
+const bodyParser = require("body-parser"); // Import body-parser
+//const usersController = require("./controllers/usersController");
+const port = 3000; //process.env.PORT || 3000;
+// Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+// Static Files
+app.set("view-engine", "ejs");
+app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-  res.send("Hello World from Express!");
-});
+app.post("/Login", Controller.getAllUsers);
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
@@ -22,8 +31,25 @@ app.delete("/user", (req, res) => {
   res.send("Got a DELETE request at /user");
 });
 
-app.use(express.static("public"));
+app.listen(port, async () => {
+  try {
+    // Connect to the database
+    await sql.connect(dbConfig);
+    console.log("Database connection established successfully");
+  } catch (err) {
+    console.error("Database connection error:", err);
+    // Terminate the application with an error code (optional)
+    process.exit(1); // Exit with code 1 indicating an error
+  }
 
-app.listen(port, () => {
-  console.log(`Express app listening on port ${port}`);
+  console.log(`Server listening on port ${port}`);
+});
+
+// Close the connection pool on SIGINT signal
+process.on("SIGINT", async () => {
+  console.log("Server is gracefully shutting down");
+  // Perform cleanup tasks (e.g., close database connections)
+  await sql.close();
+  console.log("Database connection closed");
+  process.exit(0); // Exit with code 0 indicating successful shutdown
 });
