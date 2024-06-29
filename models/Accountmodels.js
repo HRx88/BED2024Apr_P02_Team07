@@ -1,10 +1,11 @@
 const sql = require("mssql"); // Add this line to import the sql module
 const dbConfig = require("../dbConfig");
+const bcrypt = require("bcryptjs");
 
 class User {
-  constructor(id, username, password, contact, email) {
+  constructor(id, name, password, contact, email) {
     this.id = id;
-    this.username = username;
+    this.name = name;
     this.password = password;
     this.contact = contact;
     this.email = email;
@@ -22,7 +23,7 @@ class User {
 
     return result.recordset.map(
       (row) =>
-        new User(row.Id, row.name, row.password, row.contactNumber, row.email)
+        new User(row.id, row.name, row.password, row.contactNumber, row.email)
     );
   }
 
@@ -39,20 +40,24 @@ class User {
     return result.recordset[0]
       ? new User(
           result.recordset[0].id,
-          result.recordset[0].username,
+          result.recordset[0].name,
+          result.recordset[0].password,
+          result.recordset[0].contactNumber,
           result.recordset[0].email
         )
       : null;
   }
 
   static async createUser(newUserData) {
-    const connection = await sql.connect(dbConfig);
+    //const salt = await bcrypt.genSalt(10);
+    // const hashedPassword = await bcrypt.hash(password, salt);
+    //const connection = await sql.connect(dbConfig);
 
     const sqlQuery =
-      "INSERT INTO Account (username,email) VALUES (@username, @email); SELECT SCOPE_IDENTITY() AS id";
+      "INSERT INTO Account (name,email) VALUES (@name, @email); SELECT SCOPE_IDENTITY() AS id";
 
     const request = connection.request();
-    request.input("username", newUserData.username);
+    request.input("name", newUserData.name);
     request.input("email", newUserData.email);
 
     const result = await request.query(sqlQuery);
@@ -66,11 +71,13 @@ class User {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery =
-      "UPDATE Account SET username = @username, email = @email WHERE id = @id"; // Parameterized query
+      "UPDATE Account SET name = @name, password= @passowrd, contactNumber= @contactNumber, email = @email WHERE id = @id"; // Parameterized query
 
     const request = connection.request();
     request.input("id", id);
-    request.input("username", newUserData.username || null);
+    request.input("name", newUserData.name || null);
+    request.input("passowrd", newUserData.password || null);
+    request.input("contactNumber", newUserData.contactNumber || null);
     request.input("email", newUserData.email || null);
 
     await request.query(sqlQuery);

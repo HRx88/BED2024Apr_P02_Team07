@@ -4,28 +4,28 @@ const Controller = require("./controllers/AccountController");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser"); // Import body-parser
+//const path = require("path");
 //const usersController = require("./controllers/usersController");
 const port = 3000; //process.env.PORT || 3000;
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // Static Files
-app.set("view-engine", "ejs");
+//app.set("View engine", "ejs");
+//app.set("View", path.join(__dirname, "View"));
 app.use(express.static("public"));
 
-app.post("/Login", Controller.getAllUsers);
+app.get("/login", Controller.getAllUsers);
 
-app.get("/", (req, res) => {
-  res.send("Hello world!");
-});
+app.get("/user/:id", Controller.getUserById);
 
 app.post("/", (req, res) => {
   res.send("Got a POST request");
 });
 
-app.put("/user", (req, res) => {
-  res.send("Got a PUT request at /user");
-});
+app.put("/user/:id", Controller.updateUser);
+
+app.patch("/user/:id", Controller.updateUser);
 
 app.delete("/user", (req, res) => {
   res.send("Got a DELETE request at /user");
