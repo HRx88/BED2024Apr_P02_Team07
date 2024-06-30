@@ -21,7 +21,7 @@ app.get("/login", Controller.getAllUsers);
 app.get("/user/:id", Controller.getUserById);
 
 app.get("/Msg", MsgController.getAllMsg);
-app.get("/Msg/acc", MsgController.get);
+app.get("/Msg/acc", MsgController.getUsersWithMsg);
 app.post("/login", Controller.createUser);
 
 app.post("/contact", MsgController.createMsg);

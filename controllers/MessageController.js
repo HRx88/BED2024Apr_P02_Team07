@@ -27,7 +27,7 @@ async function getUsersWithMsg(req, res) {
     res.json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching users with books" });
+    res.status(500).json({ message: "Error fetching users with Message" });
   }
 }
 
