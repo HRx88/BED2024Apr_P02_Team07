@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const Controller = require("./controllers/AccountController");
+const MsgController = require("./controllers/MessageController");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser"); // Import body-parser
@@ -19,9 +20,11 @@ app.get("/login", Controller.getAllUsers);
 
 app.get("/user/:id", Controller.getUserById);
 
-app.post("/", (req, res) => {
-  res.send("Got a POST request");
-});
+app.get("/Msg", MsgController.getAllMsg);
+app.get("/Msg/acc", MsgController.get);
+app.post("/login", Controller.createUser);
+
+app.post("/contact", MsgController.createMsg);
 
 app.put("/user/:id", Controller.updateUser);
 
