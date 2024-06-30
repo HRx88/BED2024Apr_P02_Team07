@@ -51,13 +51,15 @@ class User {
   static async createUser(newUserData) {
     //const salt = await bcrypt.genSalt(10);
     // const hashedPassword = await bcrypt.hash(password, salt);
-    //const connection = await sql.connect(dbConfig);
+    const connection = await sql.connect(dbConfig);
 
     const sqlQuery =
-      "INSERT INTO Account (name,email) VALUES (@name, @email); SELECT SCOPE_IDENTITY() AS id";
+      "INSERT INTO Account (name,password,contactNumber,email) VALUES (@name,@passowrd, @contactNumber,@email); SELECT SCOPE_IDENTITY() AS id";
 
     const request = connection.request();
     request.input("name", newUserData.name);
+    request.input("passowrd", newUserData.password);
+    request.input("contactNumber", newUserData.contactNumber);
     request.input("email", newUserData.email);
 
     const result = await request.query(sqlQuery);
