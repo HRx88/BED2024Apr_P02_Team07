@@ -2,10 +2,11 @@ const sql = require("mssql"); // Add this line to import the sql module
 const dbConfig = require("../dbConfig"); // Adjust the path as necessary
 
 class User {
-  constructor(id, username, email) {
+  constructor(id, username, passwordHash, role) {
     this.id = id;
     this.username = username;
-    this.email = email;
+    this.password = passwordHash;
+    this.role = role;
   }
 
   static async getAllUsers() {
@@ -19,7 +20,7 @@ class User {
     connection.close();
 
     return result.recordset.map(
-      (row) => new User(row.id, row.username, row.email)
+      (row) => new User(row.id, row.username, row.passwordHash, row.role)
     );
   }
 
@@ -37,7 +38,28 @@ class User {
       ? new User(
           result.recordset[0].id,
           result.recordset[0].username,
-          result.recordset[0].email
+          result.recordset[0].passwordHash,
+          result.recordset[0].role
+        )
+      : null;
+  }
+
+  static async getUserByUsername(username) {
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = "SELECT * FROM Users WHERE username = @username";
+
+    const request = connection.request();
+    request.input("username", username);
+    const result = await request.query(sqlQuery);
+
+    connection.close();
+
+    return result.recordset[0]
+      ? new User(
+          result.recordset[0].id,
+          result.recordset[0].username,
+          result.recordset[0].passwordHash,
+          result.recordset[0].role
         )
       : null;
   }
@@ -46,11 +68,12 @@ class User {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery =
-      "INSERT INTO Users (username,email) VALUES (@username, @email); SELECT SCOPE_IDENTITY() AS id";
+      "INSERT INTO Users (username,passwordHash,role) VALUES (@username, @passwordHash,@role); SELECT SCOPE_IDENTITY() AS id";
 
     const request = connection.request();
     request.input("username", newUserData.username);
-    request.input("email", newUserData.email);
+    request.input("passwordHash", newUserData.passwordHash);
+    request.input("role", newUserData.role);
 
     const result = await request.query(sqlQuery);
 
@@ -63,12 +86,13 @@ class User {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery =
-      "UPDATE Users SET username = @username, email = @email WHERE id = @id"; // Parameterized query
+      "UPDATE Users SET username = @username, passwordHash = @passwordHash role=@role WHERE id = @id"; // Parameterized query
 
     const request = connection.request();
     request.input("id", id);
     request.input("username", newUserData.username || null);
-    request.input("email", newUserData.email || null);
+    request.input("passwordHash", newUserData.passwordHash || null);
+    request.input("role", newUserData.role || null);
 
     await request.query(sqlQuery);
 

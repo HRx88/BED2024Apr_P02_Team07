@@ -2,10 +2,11 @@ const sql = require("mssql"); // Add this line to import the sql module
 const dbConfig = require("../dbConfig"); // Adjust the path as necessary
 
 class Book {
-  constructor(id, title, author) {
+  constructor(id, title, author, availability) {
     this.id = id;
     this.title = title;
     this.author = author;
+    this.availability = availability;
   }
 
   static async getAllBooks() {
@@ -38,7 +39,8 @@ class Book {
       ? new Book(
           result.recordset[0].id,
           result.recordset[0].title,
-          result.recordset[0].author
+          result.recordset[0].author,
+          result.recordset[0].availability
         )
       : null; // Handle book not found
   }
@@ -46,11 +48,12 @@ class Book {
   static async createBook(newBookData) {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `INSERT INTO Books (title, author) VALUES (@title, @author); SELECT SCOPE_IDENTITY() AS id;`; // Retrieve ID of inserted record
+    const sqlQuery = `INSERT INTO Books (title, author,availability) VALUES (@title, @author,@availability); SELECT SCOPE_IDENTITY() AS id;`; // Retrieve ID of inserted record
 
     const request = connection.request();
     request.input("title", newBookData.title);
     request.input("author", newBookData.author);
+    request.input("availability", newBookData.availability);
 
     const result = await request.query(sqlQuery);
 
@@ -68,6 +71,7 @@ class Book {
     request.input("id", id);
     request.input("title", newBookData.title || null); // Handle optional fields
     request.input("author", newBookData.author || null);
+    request.input("availability", newBookData.availability);
 
     await request.query(sqlQuery);
 
