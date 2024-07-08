@@ -40,38 +40,39 @@ class Msg {
     return this.getAllMsg(result.recordset[0].id);
   }
 
-  static async getUserwithMsg() {
+  static async getUserWithMessages() {
     try {
       const query = `
-       SELECT UM.Id AS MessageId, A.Id AS AccountId, A.name AS UserName, A.contactNumber, A.email, UM.MessageText, UM.CreatedAt
-       FROM UserMessages UM
-       JOIN Account A ON UM.UserId = A.Id;
-      `;
+      SELECT UM.Id AS MessageId, A.Id AS AccountId, A.name AS UserName, A.contactNumber, A.email, UM.MessageText, UM.CreatedAt
+      FROM UserMessages UM
+      JOIN Account A ON UM.UserId = A.Id;
+    `;
 
       const result = await connection.request().query(query);
 
-      // Group users and their books
-      const usersWithBooks = {};
+      // Group users and their messages
+      const usersWithMessages = {};
       for (const row of result.recordset) {
-        const userId = row.user_id;
-        if (!usersWithBooks[userId]) {
-          usersWithBooks[userId] = {
+        const userId = row.AccountId; // Corrected to use AccountId
+        if (!usersWithMessages[userId]) {
+          usersWithMessages[userId] = {
             id: userId,
-            username: row.username,
+            username: row.UserName,
+            contactNumber: row.contactNumber,
             email: row.email,
-            books: [],
+            messages: [], // Corrected to use messages instead of books
           };
         }
-        usersWithBooks[userId].books.push({
-          id: row.book_id,
-          title: row.title,
-          author: row.author,
+        usersWithMessages[userId].messages.push({
+          id: row.MessageId,
+          text: row.MessageText,
+          createdAt: row.CreatedAt,
         });
       }
 
-      return Object.values(usersWithBooks);
+      return Object.values(usersWithMessages);
     } catch (error) {
-      throw new Error("Error fetching users with books");
+      throw new Error("Error fetching users with messages");
     } finally {
       await connection.close();
     }
