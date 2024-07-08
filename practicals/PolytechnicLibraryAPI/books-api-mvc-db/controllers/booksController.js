@@ -46,7 +46,23 @@ const updateBook = async (req, res) => {
     res.json(updatedBook);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error updating book");
+    res.status(500).send("Error updating book ");
+  }
+};
+
+const updateBookavailability = async (req, res) => {
+  const bookId = parseInt(req.params.id);
+  const newBookData = req.body;
+
+  try {
+    const updatedBook = await Book.updateBookavailability(bookId, newBookData);
+    if (!updatedBook) {
+      return res.status(404).send("Book not found");
+    }
+    res.json(updatedBook);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating book availability");
   }
 };
 
@@ -71,4 +87,5 @@ module.exports = {
   getBookById,
   updateBook,
   deleteBook,
+  updateBookavailability,
 };

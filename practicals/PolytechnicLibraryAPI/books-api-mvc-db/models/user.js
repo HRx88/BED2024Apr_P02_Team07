@@ -5,7 +5,7 @@ class User {
   constructor(id, username, passwordHash, role) {
     this.id = id;
     this.username = username;
-    this.password = passwordHash;
+    this.passwordHash = passwordHash;
     this.role = role;
   }
 
@@ -64,16 +64,16 @@ class User {
       : null;
   }
 
-  static async createUser(newUserData) {
+  static async createUser(username, passwordHash, role) {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery =
+      //  "INSERT INTO Users (id,username,passwordHash,role) VALUES ('9',@username, @passwordHash,@role);";
       "INSERT INTO Users (username,passwordHash,role) VALUES (@username, @passwordHash,@role); SELECT SCOPE_IDENTITY() AS id";
-
     const request = connection.request();
-    request.input("username", newUserData.username);
-    request.input("passwordHash", newUserData.passwordHash);
-    request.input("role", newUserData.role);
+    request.input("username", username);
+    request.input("passwordHash", passwordHash);
+    request.input("role", role);
 
     const result = await request.query(sqlQuery);
 

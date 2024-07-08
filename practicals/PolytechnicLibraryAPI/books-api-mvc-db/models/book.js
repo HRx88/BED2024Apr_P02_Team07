@@ -20,7 +20,7 @@ class Book {
     connection.close();
 
     return result.recordset.map(
-      (row) => new Book(row.id, row.title, row.author)
+      (row) => new Book(row.id, row.title, row.author, row.availability)
     ); // Convert rows to Book objects
   }
 
@@ -65,13 +65,29 @@ class Book {
   static async updateBook(id, newBookData) {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `UPDATE Books SET title = @title, author = @author WHERE id = @id`; // Parameterized query
+    const sqlQuery = `UPDATE Books SET title = @title, author = @author,availability=@availability WHERE id = @id`; // Parameterized query
 
     const request = connection.request();
     request.input("id", id);
     request.input("title", newBookData.title || null); // Handle optional fields
     request.input("author", newBookData.author || null);
-    request.input("availability", newBookData.availability);
+    request.input("availability", newBookData.availability || null);
+
+    await request.query(sqlQuery);
+
+    connection.close();
+
+    return this.getBookById(id); // returning the updated book data
+  }
+
+  static async updateBookavailability(id, newBookData) {
+    const connection = await sql.connect(dbConfig);
+
+    const sqlQuery = `UPDATE Books SET availability=@availability WHERE id = @id`; // Parameterized query
+
+    const request = connection.request();
+    request.input("id", id);
+    request.input("availability", newBookData.availability || null);
 
     await request.query(sqlQuery);
 

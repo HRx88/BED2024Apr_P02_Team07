@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+require("dotenv").config();
 async function registerUser(req, res) {
   const { username, password, role } = req.body;
 
@@ -75,7 +75,9 @@ async function login(req, res) {
       id: user.id,
       role: user.role,
     };
-    const token = jwt.sign(payload, "your_secret_key", { expiresIn: "3600s" }); // Expires in 1 hour
+    const token = jwt.sign(payload, process.env.secret_key, {
+      expiresIn: "3600s",
+    }); // Expires in 1 hour
 
     return res.status(200).json({ token });
   } catch (err) {
@@ -110,7 +112,11 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
   const newUser = req.body;
   try {
-    const createdUser = await User.createUser(newUser);
+    const createdUser = await User.createUser(
+      newUser.user,
+      newUser.password,
+      newUser.role
+    );
     res.status(201).json(createdUser);
   } catch (error) {
     console.error(error);
