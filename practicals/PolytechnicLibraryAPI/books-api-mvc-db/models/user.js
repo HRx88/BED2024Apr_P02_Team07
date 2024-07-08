@@ -69,7 +69,7 @@ class User {
 
     const sqlQuery =
       //  "INSERT INTO Users (id,username,passwordHash,role) VALUES ('9',@username, @passwordHash,@role);";
-      "INSERT INTO Users (username,passwordHash,role) VALUES (@username, @passwordHash,@role); SELECT SCOPE_IDENTITY() AS id";
+      "INSERT INTO Users (username,passwordHash,role) OUTPUT INSERTED.id VALUES (@username, @passwordHash,@role); SELECT SCOPE_IDENTITY() AS id";
     const request = connection.request();
     request.input("username", username);
     request.input("passwordHash", passwordHash);
