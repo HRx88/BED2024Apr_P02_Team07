@@ -4,7 +4,8 @@ const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser"); // Import body-parser
 const usersController = require("./controllers/usersController");
-
+const authorUser = require("./middlewares/authorizeUser");
+require("dotenv").config();
 const app = express();
 
 const staticMiddleware = express.static("public"); // Path to the public folder
@@ -23,8 +24,15 @@ const validateBook = require("./middlewares/validateBook");
 app.get("/users/search", usersController.searchUsers);
 app.get("/users/with-books", usersController.getUsersWithBooks);
 
-app.get("/books", booksController.getAllBooks);
+app.post("/register", usersController.registerUser);
+app.post("/login", usersController.login);
+app.get("/books", authorUser, booksController.getAllBooks);
 app.get("/books/:id", booksController.getBookById);
+app.put(
+  "/books/:id/availability",
+  authorUser,
+  booksController.updateBookavailability
+);
 app.post("/books", validateBook, booksController.createBook); // POST for creating books (can handle JSON data)
 app.put("/books/:id", validateBook, booksController.updateBook); // PUT for updating books
 app.delete("/books/:id", booksController.deleteBook); // DELETE for deleting books
