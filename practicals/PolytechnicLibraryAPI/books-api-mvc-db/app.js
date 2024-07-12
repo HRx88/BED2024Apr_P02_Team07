@@ -10,6 +10,8 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger-output.json"); // Import generated spec
 
 const app = express();
+
+// Serve the Swagger UI at a specific route
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const staticMiddleware = express.static("public"); // Path to the public folder
 
