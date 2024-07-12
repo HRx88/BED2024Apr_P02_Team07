@@ -6,8 +6,11 @@ const bodyParser = require("body-parser"); // Import body-parser
 const usersController = require("./controllers/usersController");
 const authorUser = require("./middlewares/authorizeUser");
 require("dotenv").config();
-const app = express();
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json"); // Import generated spec
 
+const app = express();
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const staticMiddleware = express.static("public"); // Path to the public folder
 
 const port = process.env.PORT || 3000; // Use environment variable or default port
