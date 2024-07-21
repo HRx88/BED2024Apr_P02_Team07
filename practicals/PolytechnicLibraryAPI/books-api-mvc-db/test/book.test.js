@@ -71,7 +71,7 @@ describe("Book.updateBookAvailability", () => {
     it("should return null if book with the given id does not exist", async () => {
       // ... arrange: set up mocks for a non-existent book id
       // ... act: call updateBookAvailability
-      // ... assert: expect the function to return null
+      // ... assert: expect the function to return null 
     });
   
     // Add more tests for error scenarios (e.g., database error)
