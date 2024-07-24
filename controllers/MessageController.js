@@ -21,10 +21,10 @@ const createMsg = async (req, res) => {
   }
 };
 
-async function getUsersWithMsg(req, res) {
+async function getAccountsWithMsg(req, res) {
   try {
-    const users = await Msg.getUsersWithMsg();
-    res.json(users);
+    const msg = await Msg.getAccountWithMessages();
+    res.json(msg);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error fetching users with Message" });
@@ -34,5 +34,5 @@ async function getUsersWithMsg(req, res) {
 module.exports = {
   getAllMsg,
   createMsg,
-  getUsersWithMsg,
+  getAccountsWithMsg,
 };

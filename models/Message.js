@@ -19,7 +19,7 @@ class Msg {
     connection.close();
 
     return result.recordset.map(
-      (row) => new Msg(row.id, row.userId, row.messageText, row.createdAt)
+      (row) => new Msg(row.Id, row.UserId, row.MessageText, row.CreatedAt)
     );
   }
 
@@ -40,34 +40,39 @@ class Msg {
     return this.getAllMsg(result.recordset[0].id);
   }
 
-  static async getUserWithMessages() {
+  static async getAccountWithMessages() {
+    const connection = await sql.connect(dbConfig);
     try {
-      const query = `
-      SELECT UM.Id AS MessageId, A.Id AS AccountId, A.name AS UserName, A.contactNumber, A.email, UM.MessageText, UM.CreatedAt
-      FROM UserMessages UM
-      JOIN Account A ON UM.UserId = A.Id;
+      //const connection = await sql.connect(dbConfig);
+      const query =`
+      SELECT A.Id AS AccountId, A.name AS UserName, A.contactNumber, A.email, M.Id AS MessageId, M.MessageText, M.CreatedAt
+      FROM Account A
+      LEFT JOIN Messages M ON M.UserId = A.Id
     `;
 
       const result = await connection.request().query(query);
 
-      // Group users and their messages
-      const usersWithMessages = {};
-      for (const row of result.recordset) {
-        const userId = row.AccountId; // Corrected to use AccountId
-        if (!usersWithMessages[userId]) {
-          usersWithMessages[userId] = {
-            id: userId,
-            username: row.UserName,
-            contactNumber: row.contactNumber,
-            email: row.email,
-            messages: [], // Corrected to use messages instead of books
-          };
-        }
+     // Group users and their messages
+    const usersWithMessages = {};
+    for (const row of result.recordset) {
+      const userId = row.AccountId;
+      if (!usersWithMessages[userId]) {
+        usersWithMessages[userId] = {
+          id: userId,
+          username: row.UserName,
+          contactNumber: row.contactNumber,
+          email: row.email,
+          messages: [],
+        };
+      }
+      if (row.MessageId) { // Check if there is a message
         usersWithMessages[userId].messages.push({
           id: row.MessageId,
           text: row.MessageText,
           createdAt: row.CreatedAt,
         });
+      }
+       
       }
 
       return Object.values(usersWithMessages);

@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const Controller = require("./controllers/AccountController");
+const AccountController = require("./controllers/AccountController");
 const MsgController = require("./controllers/MessageController");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
@@ -16,23 +16,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.set("View", path.join(__dirname, "View"));
 app.use(express.static("public"));
 
-app.get("/login", Controller.getAllUsers);
-
-app.get("/user/:id", Controller.getUserById);
+app.get("/account/:id", AccountController.getUserById);
 
 app.get("/Msg", MsgController.getAllMsg);
-app.get("/Msg/acc", MsgController.getUsersWithMsg);
-app.post("/login", Controller.createUser);
+app.get("/Msg/acc", MsgController.getAccountsWithMsg);
+app.post("/login", AccountController.login);
+app.post("/register",AccountController.registerAccount)
 
 app.post("/contact", MsgController.createMsg);
 
-app.put("/user/:id", Controller.updateUser);
+app.put("/account/:id", AccountController.updateUser);
 
-app.patch("/user/:id", Controller.updateUser);
 
-app.delete("/user", (req, res) => {
-  res.send("Got a DELETE request at /user");
-});
+app.delete("/account/:id",AccountController.deleteUser);
 
 app.listen(port, async () => {
   try {
