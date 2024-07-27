@@ -2,10 +2,12 @@ const express = require("express");
 const app = express();
 const AccountController = require("./controllers/AccountController");
 const MsgController = require("./controllers/MessageController");
+const authorization = require("./middlewares/authorization ");
+const validateMessage = require("./middlewares/validateMessage");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser"); // Import body-parser
-//const path = require("path");
+const path = require("path");
 //const usersController = require("./controllers/usersController");
 const port = 3000; //process.env.PORT || 3000;
 // Middleware
@@ -16,19 +18,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.set("View", path.join(__dirname, "View"));
 app.use(express.static("public"));
 
-app.get("/account/:id", AccountController.getUserById);
+app.get("/account/:id",authorization, AccountController.getUserById);
 
-app.get("/Msg", MsgController.getAllMsg);
-app.get("/Msg/acc", MsgController.getAccountsWithMsg);
+app.get("/Msg",authorization, MsgController.getAllMsg);
+app.get("/Msg/acc",authorization, MsgController.getAccountsWithMsg);
 app.post("/login", AccountController.login);
 app.post("/register",AccountController.registerAccount)
 
-app.post("/contact", MsgController.createMsg);
+app.post("/contact", authorization,validateMessage, MsgController.createMsg);
 
-app.put("/account/:id", AccountController.updateUser);
+app.put("/account/:id",authorization, AccountController.updateUser);
 
 
-app.delete("/account/:id",AccountController.deleteUser);
+app.delete("/account/:id",authorization, AccountController.deleteUser);
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "html", "login.html"));
+});
 
 app.listen(port, async () => {
   try {

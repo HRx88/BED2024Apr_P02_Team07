@@ -41,18 +41,17 @@ class Msg {
   }
 
   static async getAccountWithMessages() {
-    const connection = await sql.connect(dbConfig);
-    try {
-      //const connection = await sql.connect(dbConfig);
-      const query =`
+  const connection = await sql.connect(dbConfig);
+  try {
+    const query = `
       SELECT A.Id AS AccountId, A.name AS UserName, A.contactNumber, A.email, M.Id AS MessageId, M.MessageText, M.CreatedAt
       FROM Account A
-      LEFT JOIN Messages M ON M.UserId = A.Id
+      INNER JOIN Messages M ON M.UserId = A.Id
     `;
 
-      const result = await connection.request().query(query);
+    const result = await connection.request().query(query);
 
-     // Group users and their messages
+    // Group users and their messages
     const usersWithMessages = {};
     for (const row of result.recordset) {
       const userId = row.AccountId;
@@ -72,16 +71,16 @@ class Msg {
           createdAt: row.CreatedAt,
         });
       }
-       
-      }
-
-      return Object.values(usersWithMessages);
-    } catch (error) {
-      throw new Error("Error fetching users with messages");
-    } finally {
-      await connection.close();
     }
+
+    return Object.values(usersWithMessages);
+  } catch (error) {
+    throw new Error("Error fetching users with messages");
+  } finally {
+    await connection.close();
   }
+}
+
 }
 
 module.exports = Msg;

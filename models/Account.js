@@ -1,6 +1,6 @@
 const sql = require("mssql"); // Add this line to import the sql module
 const dbConfig = require("../dbConfig");
-
+const bcrypt = require("bcryptjs");
 
 class User {
   constructor(id, name, password, contact, email, role) {
@@ -41,7 +41,7 @@ class User {
 
       return result.recordset[0]
         ? new User(
-            result.recordset[0].id,
+            result.recordset[0].Id,
             result.recordset[0].name,
             result.recordset[0].password,
             result.recordset[0].contactNumber,
@@ -94,7 +94,7 @@ class User {
       request.input("password", password);
       request.input("contactNumber", contact);
       request.input("email", email);
-      request.input("role", role);
+      request.input("role", role || 'member');
 
       const result = await request.query(sqlQuery);
       connection.close();
@@ -111,14 +111,12 @@ class User {
       const connection = await sql.connect(dbConfig);
 
       const sqlQuery =`UPDATE Account SET name = CASE WHEN @name IS NOT NULL THEN @name ELSE name END,
-       password = CASE WHEN @password IS NOT NULL THEN @password ELSE password END, 
        contactNumber = CASE WHEN @contactNumber IS NOT NULL THEN @contactNumber ELSE contactNumber END,
        email = CASE WHEN @email IS NOT NULL THEN @email ELSE email END WHERE id = @id`;
 
       const request = connection.request();
       request.input("id", id);
       request.input("name", newUserData.name || null);
-      request.input("password", newUserData.password || null);
       request.input("contactNumber", newUserData.contactNumber || null);
       request.input("email", newUserData.email || null);
 

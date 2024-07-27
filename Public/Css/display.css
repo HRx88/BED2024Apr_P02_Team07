@@ -1,0 +1,52 @@
+
+
+.box-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    /* Adjust background color if needed */
+}
+
+.wrapper {
+    width: 420px;
+    background: rgba(255, 255, 255, 0.2);
+    /* Light background to improve text visibility */
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    /* Slightly less transparent border */
+    backdrop-filter: blur(5px);
+    /* Reduced blur effect */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    border-radius: 10px;
+    padding: 30px 40px;
+    margin: 10px;
+}
+
+.wrapper h2 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    /* Optional: Adds a subtle shadow for better readability */
+}
+
+.list-group-item {
+    background-color: rgba(255, 255, 255, 0.25);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    /* Optional: Adds a subtle shadow for better readability */
+}
+
+.list-group-item strong {
+    color: whitesmoke;
+    /* Highlight text color */
+}
+
+.list-group-item div {
+    margin-top: 10px;
+}
