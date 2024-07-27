@@ -85,7 +85,7 @@ async function registerAccount(req, res) {
 
   try {
     // Validate user data
-    const validationErrors = ValidateUserData(username, password, role);
+    const validationErrors = ValidateUserData(username, password,contactNumber,email);
     if (validationErrors.length > 0) {
       return res
         .status(400)
@@ -112,7 +112,7 @@ async function registerAccount(req, res) {
     return res.status(500).json({ message: "Internal server error" });
   }
 }
-function ValidateUserData(username, password, role) {
+function ValidateUserData(username, password,contactNumber,email) {
   const errors = [];
   if (!username || username.trim() === "") {
     errors.push("Username is required");
@@ -124,10 +124,19 @@ function ValidateUserData(username, password, role) {
     errors.push("Password must be at least 8 characters long");
   }
 
-  if (!role || role.trim() === "") {
-    errors.push("Role is required");
-  } else if (!["member", "admin"].includes(role.toLowerCase())) {
-    errors.push("Invalid role. Valid roles: member,admin");
+  if (!contactNumber || contactNumber.trim() === "") {
+    errors.push("contactNumber is required");
+  } else if (contactNumber.length < 8) {
+    errors.push("contactNumber must be  8 digit long");
+  }
+
+  if (!email || email.trim() === "") {
+    errors.push("email is required");
+  } else {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      errors.push("Invalid email format");
+    }
   }
 
   return errors;
@@ -157,7 +166,7 @@ async function login(req, res) {
       expiresIn: "3600s",
     }); // Expires in 1 hour
 
-    return res.status(200).json({ token });
+    return res.status(200).json({ token,user });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });

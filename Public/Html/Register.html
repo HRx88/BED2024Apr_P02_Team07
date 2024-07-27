@@ -13,26 +13,17 @@
 
     <link rel="stylesheet" href="../Css/Main.css" />
     <link rel="stylesheet" href="../Css/Register.css" />
-    <script
-      src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"
-      type="module"
-    ></script>
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
   </head>
   <body>
     <div id="loading-page">
-      <dotlottie-player
-        src="https://lottie.host/ca4f6576-7e1c-4cf9-b6b6-31310f811817/dQyHiGq3tX.json"
-        background="transparent"
-        speed="1"
-        style="width: 300px; height: 300px"
-        loop
-        autoplay
-      ></dotlottie-player>
+      <dotlottie-player src="https://lottie.host/ef58355e-d988-41cf-b294-1f450ce5a43d/j2H7l7m9wH.json"
+        background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></dotlottie-player>
     </div>
     <nav class="navbar navbar-expand-lg bg-light">
       <div class="container-fluid">
         <img src="../Css/Logo.png" alt="Logo" />
-        <a class="navbar-brand" href="../Html/Home.html">CarParkXD</a>
+        <a class="navbar-brand" href="../Html/Home.html">ELC</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -53,15 +44,18 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../Html/Weather.html">Weather</a>
+              <a class="nav-link" href="../Html/ContactUs.html">Contact Us</a>
             </li>
             <li class="nav-item">
               <a
-                class="nav-link show disabled"
-                href="../Html/Favorite.html"
-                style="display: none"
-                >Favorite</a
+                class="nav-link"
+                href="../Html/Account.html"
+                
+                >Account</a
               >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="../Html/DisplayMSG.html">Message</a>
             </li>
           </ul>
           <button class="btn btn-outline-success" id="login" type="button">
@@ -85,14 +79,18 @@
             />
           </div>
           <div class="input-box">
-            <label for="number" class="form-label">Phone number</label>
+            <label for="email" class="form-label">Email</label>
             <input
-              type="text"
+              type="email"
               class="form-control"
-              placeholder="Enter your Phone Number"
-              id="number"
+              placeholder="Enter your email"
+              id="email"
               required
             />
+          </div>
+          <div class="input-box">
+            <label for="number" class="form-label">Phone number</label>
+            <input type="text" class="form-control" placeholder="Enter your Phone Number" id="number" required />
           </div>
           <div class="input-box">
             <label for="Password1" class="form-label">Password</label>
