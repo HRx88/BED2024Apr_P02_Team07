@@ -16,8 +16,10 @@ function verifyJWT(req, res, next) {
 
     // Check user role for authorization (replace with your logic)
     const authorizedRoles = {
-        "/messages": ["admin"],  // Only admins can view the message page
-        "/account/[0-9]+": ["member"], // Only members can view their own account page
+      "/Msg": ["admin"],  // Only admins can view the message page
+      "/Msg/acc": ["admin"], 
+      "/account/[0-9]+": ["member","admin"], 
+      "/contact":["member","admin"],
     };
 
     const requestedEndpoint = req.url;

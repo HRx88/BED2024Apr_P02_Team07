@@ -1,9 +1,11 @@
 const Joi = require("joi");
 
-const validateBook = (req, res, next) => {
+const validateMessage = (req, res, next) => {
   const schema = Joi.object({
-    title: Joi.string().min(3).max(50).required(),
-    author: Joi.string().min(3).max(50).required(),
+    userId:Joi.string().min(1),
+    messageText: Joi.string().min(9).max(255),
+
+    
   });
 
   const validation = schema.validate(req.body, { abortEarly: false }); // Validate request body
@@ -17,4 +19,4 @@ const validateBook = (req, res, next) => {
   next(); // If validation passes, proceed to the next route handler
 };
 
-module.exports = validateBook;
+module.exports = validateMessage;
