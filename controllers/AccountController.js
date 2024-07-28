@@ -173,6 +173,21 @@ async function login(req, res) {
   }
 }
 
+
+const getCourse = async (req, res) => {
+  const userId = parseInt(req.params.id);
+  try {
+    const user = await User.getCourse(userId);
+    if (!user) {
+      return res.status(404).send("Data not found");
+    }
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving data");
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -181,4 +196,5 @@ module.exports = {
   deleteUser,
   registerAccount,
   login,
+  getCourse,
 };

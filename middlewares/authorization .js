@@ -19,7 +19,8 @@ function verifyJWT(req, res, next) {
       "/Msg": ["admin"],  // Only admins can view the message page
       "/Msg/acc": ["admin"], 
       "/account/[0-9]+": ["member","admin"], 
-      "/contact":["member","admin"],
+      "/contact": ["member", "admin"],
+      "/course/[0-9]+": ["member","admin"],
     };
 
     const requestedEndpoint = req.url;

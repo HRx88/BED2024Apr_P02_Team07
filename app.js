@@ -21,7 +21,8 @@ app.use(express.static("public"));
 app.get("/account/:id",authorization, AccountController.getUserById);
 
 app.get("/Msg",authorization, MsgController.getAllMsg);
-app.get("/Msg/acc",authorization, MsgController.getAccountsWithMsg);
+app.get("/Msg/acc", authorization, MsgController.getAccountsWithMsg);
+app.get("/course/:id", authorization, AccountController.getCourse);
 app.post("/login", AccountController.login);
 app.post("/register",AccountController.registerAccount)
 

@@ -166,6 +166,67 @@ class User {
       throw error;
     }
   }
+
+
+  static async getCourse(id) {
+  try {
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = `
+      SELECT 
+        A.Id AS UserId,
+        A.name AS UserName,
+        A.contactNumber,
+        A.email,
+        A.role,
+        C.Title AS CourseTitle,
+        ACV.ViewedAt
+      FROM 
+        Account A
+      LEFT JOIN 
+        AccountCourseView ACV ON ACV.AccountId = A.Id
+      LEFT JOIN 
+        Course C ON ACV.CourseId = C.Id
+      WHERE 
+        A.Id = @id;
+    `;
+
+    const request = connection.request();
+    request.input("id",  id);
+    const result = await request.query(sqlQuery);
+    connection.close();
+
+    if (result.recordset.length === 0) {
+      return null; // User not found
+    }
+
+    const user = result.recordset[0];
+    const userWithCourses = {
+      id: user.UserId,
+      username: user.UserName,
+      contactNumber: user.contactNumber,
+      email: user.email,
+      role: user.role,
+      courses: []
+    };
+
+    for (const row of result.recordset) {
+      if (row.CourseTitle) {
+        userWithCourses.courses.push({
+          title: row.CourseTitle,
+          viewedAt: row.ViewedAt
+        });
+      }
+    }
+
+    return userWithCourses;
+  } catch (error) {
+    console.error("Error getting Course by ID:", error);
+    throw error;
+  }
+}
+
+
+
 }
 
 module.exports = User;
