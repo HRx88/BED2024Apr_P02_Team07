@@ -12,6 +12,7 @@ function Loadingpage() {
 function Login() {
   const login = document.querySelector("#login");
   login.addEventListener("click", function () {
+    localStorage.clear();
     window.location.href = "../Html/Login.html";
   });
 }
