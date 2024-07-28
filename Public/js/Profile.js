@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editProfileButton = document.querySelector('.edit-profile');
     const deleteAccountButton = document.querySelector('.delete-account');
     const loadingPage = document.getElementById('loading-page');
+    const courseInfoContainer = document.querySelector('.course-info');
 
     // Show or hide the loading animation
     const showLoading = (show) => {
@@ -161,6 +162,57 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+       // Fetch course information from the server
+    async function fetchCourseInfo() {
+        const { token, userId } = getLocalStorageData();
+
+        if (!token || !userId) {
+            alert('User not authenticated.');
+            return;
+        }
+
+        showLoading(true); // Show loading animation
+
+        try {
+            const response = await fetch(`/course/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                displayCourseInfo(data);
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to fetch course information: ${errorData.message || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Error fetching course info:', error);
+            alert('An unexpected error occurred. Please try again later.');
+        } finally {
+            showLoading(false); // Hide loading animation
+        }
+    }
+    // Display course information
+    function displayCourseInfo(data) {
+        if (!data.courses || data.courses.length === 0) {
+            courseInfoContainer.innerHTML = '<p>No courses found.</p>';
+            return;
+        }
+
+        courseInfoContainer.innerHTML = data.courses.map(course => `
+            <div class="course-details">
+                <p><strong>Course Title:</strong> ${course.title}</p>
+                <p><strong>Viewed At:</strong> ${new Date(course.viewedAt).toLocaleString()}</p>
+            </div>
+        `).join('');
+    }
+
+
     // Initial data fetch
     fetchProfileInfo();
+     fetchCourseInfo(); 
 });
